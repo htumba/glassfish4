@@ -66,6 +66,15 @@
   <resources>
     <jdbc-resource pool-name="__TimerPool" jndi-name="jdbc/__TimerPool" object-type="system-admin" />
     <jdbc-resource pool-name="DerbyPool" jndi-name="jdbc/__default" object-type="system-all" />
+	<jdbc-resource pool-name="PostgreSQLDS" jndi-name="jdbc/postgresql" object-type="system-all" /> 
+	<jdbc-connection-pool 
+        name="PostgreSQLDS" 
+        datasource-classname="org.postgresql.xa.PGXADataSource"
+        res-type="javax.sql.XADataSource">
+        <property name="user" value="${env.OPENSHIFT_POSTGRESQL_DB_USERNAME}"/>
+        <property name="password" value="${env.OPENSHIFT_POSTGRESQL_DB_PASSWORD}"/>
+        <property name="url" value="jdbc:postgresql://${env.OPENSHIFT_POSTGRESQL_DB_HOST}:${env.OPENSHIFT_POSTGRESQL_DB_PORT}"/>
+    </jdbc-connection-pool>
     <jdbc-connection-pool name="__TimerPool" datasource-classname="org.apache.derby.jdbc.EmbeddedXADataSource" res-type="javax.sql.XADataSource">
       <property value="${com.sun.aas.instanceRoot}/lib/databases/ejbtimer" name="databaseName" />
       <property value=";create=true" name="connectionAttributes" />
@@ -83,6 +92,7 @@
     <server name="server" config-ref="server-config">
       <resource-ref ref="jdbc/__TimerPool" />
       <resource-ref ref="jdbc/__default" />
+	  <resource-ref ref="jdbc/postgresql" />
     </server>
   </servers>
   <nodes>
